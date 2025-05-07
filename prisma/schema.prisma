@@ -13,3 +13,41 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+//Modelos o Tablas
+
+model User{
+  id String @id @default(uuid())
+  email String @unique
+  password String?
+  firstName String?
+  secondName String?
+  lastName String?
+  seconLastName String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Usuario {
+  id         Int          @id @default(autoincrement())
+  nombre     String
+  correo     String       @unique
+  pasword    String
+  empresaId  Int?         // Relación con empresa (opcional si el usuario puede no tener una empresa)
+  empresa    Empresa?     @relation(fields: [empresaId], references: [id])
+  actividades Actividad[]
+}
+
+model Empresa {
+  id        Int        @id @default(autoincrement())
+  nombre    String
+  usuarios  Usuario[]  // Relación inversa con usuarios
+}
+
+model Actividad {
+  id         Int      @id @default(autoincrement())
+  titulo     String
+  descripcion String?
+  usuarioId  Int
+  usuario    Usuario   @relation(fields: [usuarioId], references: [id])
+}
